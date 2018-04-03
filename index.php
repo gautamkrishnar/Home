@@ -814,7 +814,7 @@ $con=mysqli_connect("mysql.hostinger.in","u802425745_home","kingsman@S1","u80242
                     </a>
                 </div>
                 <div class="col-xs-6 g-text-right--xs">
-                    <p class="g-font-size-14--xs g-margin-b-0--xs g-color--white-opacity-light"><a href="https://mozillakerala.co">&copy; Mozila Kerala</a> Theme Powered by: <a href="https://keenthemes.com/">KeenThemes Inc.</a></p>
+                    <p class="g-font-size-14--xs g-margin-b-0--xs g-color--white-opacity-light"><a href="https://mozillakerala.com">&copy; Mozila Kerala</a> Theme Powered by: <a href="https://keenthemes.com/">KeenThemes Inc.</a></p>
                 </div>
             </div>
         </div>
