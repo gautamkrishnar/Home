@@ -1,4 +1,8 @@
+<?php
 
+$con=mysqli_connect("mysql.hostinger.in","u802425745_home","kingsman@S1","u802425745_home");
+
+?>
 
 
 <!DOCTYPE html>
@@ -73,9 +77,9 @@
                     <div class="container-fluid">
                         <!-- Menu List -->                                
                         <ul class="list-unstyled s-header__nav-menu">
-                            <li class="s-header__nav-menu-item"><a class="s-header__nav-menu-link s-header__nav-menu-link-divider -is-active" href="index.html">mozilla kerala</a></li>
+                            <li class="s-header__nav-menu-item"><a class="s-header__nav-menu-link s-header__nav-menu-link-divider -is-active" href="index.php">mozilla kerala</a></li>
 
-                            <li class="s-header__nav-menu-item"><a class="s-header__nav-menu-link s-header__nav-menu-link-divider" href="team.html">Team</a></li>
+                            <li class="s-header__nav-menu-item"><a class="s-header__nav-menu-link s-header__nav-menu-link-divider" href="team.php">Team</a></li>
 
                         </ul>
                         <!-- End Menu List -->
@@ -86,7 +90,7 @@
                 <!-- Action -->
                 <ul class="list-inline s-header__action s-header__action--lb">
                     <li class="s-header__action-item"><a class="s-header__action-link -is-active" href="#">En</a></li>
-                    <li class="s-header__action-item"><a class="s-header__action-link" href="#">Fr</a></li>
+
                 </ul>
                 <!-- End Action -->
 
@@ -115,6 +119,100 @@
             </div>
             <!-- End Overlay -->
         </header>
+
+
+        <?php
+
+$email=$_POST['txt_email'];
+$sql = "SELECT vol_email FROM tbl_volunteer WHERE vol_email='$email'";
+$result = mysqli_query($con,$sql);
+$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+
+$github=$_POST['txt_github'];
+$sql_github="SELECT vol_url FROM tbl_volunteer WHERE vol_url='$github'";
+$result1 = mysqli_query($con,$sql_github);
+$row = mysqli_fetch_array($result1,MYSQLI_ASSOC);
+
+if(mysqli_num_rows($result) == 1)
+{
+    $message_email="This email Address already Exits";
+    echo"<script type='text/javascript'>alert('$message_email');</script>";
+        }
+        else if(mysqli_num_rows($result1) == 1)
+        {
+            $message_github="This Github account has been used By someone else. please check the github account";
+            echo"<script type='text/javascript'>alert('$message_github');</script>";
+        }
+        else
+        {
+        if (isset($_POST['submit'])) {
+        $re_name = $_POST['txt_name'];
+        $re_mail = $_POST['txt_email'];
+        $re_url = $_POST['txt_github'];
+        $re_community = $_POST['txt_community'];
+
+            $re_exp=$_POST['txt_exp'];
+            $re_why=$_POST['txt_why'];
+            $re_help=$_POST['txt_help'];
+
+            $ins = "INSERT INTO tbl_volunteer(vol_name,vol_email,vol_url,vol_community,vol_exp,vol_why,vol_help) VALUES ('" . $re_name . "','" . $re_mail . "','" . $re_url . "','" . $re_community . "','".$re_exp."','".$re_why."','".$re_help."')";
+            mysqli_query($con,$ins);
+        $message="Registered Succesfully";
+        echo"<script type='text/javascript'>alert('$message');</script>";
+        require("include/class.phpmailer.php");
+        $mailid=$re_mail;
+        $name=$re_name;
+        $mail = new PHPMailer();
+
+        $mail->IsSMTP(); // set mailer to use SMTP
+        $mail->SMTPAuth = true;     // turn on SMTP authentication
+        $mail->SMTPSecure = "tls";
+
+        $mail->Host = "mx1.hostinger.in";  // specify main and backup server
+        $mail->Port = 587;
+        $mail->Username = "hello@mozillakerala.com";  // SMTP username
+        $mail->Password = "kingsman@S1"; // SMTP password
+
+        $mail->From = "hello@mozillakerala.com";
+        $mail->FromName = "Mozilla Global Sprint Team";
+        $mail->AddAddress($mailid, $name);
+
+
+        $mail->WordWrap = 50;// set word wrap to 50 characters
+        $mail->IsHTML(true);// set email format to HTML
+
+        $mail->Subject = "Application Recieved";
+        /*$mail->Body    = "Dear user Password is:<b>".$pass." </b>";
+        */
+        $mail->Body    = "Dear ".$re_name." <br> Thank you for Registering to be a volunteer for <a href='https://ti.to/Mozilla/global-sprint-mozilla-kerala18'>Mozilla Global Sprint 2018 -Kochi</a> .<br> If we find you are a suitable person for this ,You will recieve an invitation mail with link to our event management platform <a href='https://ti.to'> ti.to</a> <br> Regards, <br> Mozilla Kerala Global Sprint Team<br>"
+        ;
+
+        $mail->AltBody = "Your Application is recieved , we will get back to via email in the coming days";
+        //echo $mail
+        //if(!$mail->Send())
+        //{
+        //   echo "Message could not be sent. <p>";
+            //   echo "Mailer Error: " . $mail->ErrorInfo;
+            //   exit;
+            //}
+            //else
+            if(!$mail->Send())
+            {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+            }
+            else {
+            #  echo "Message has been sent";
+            }
+
+            }
+            }
+
+            ?>
+
+
+
+
 <div class="js__parallax-window" style="background: url(img/wp/23.png) 50% 0 repeat fixed;" >
             <div class="container g-padding-y-80--xs g-padding-y-125--sm">
                 <div class="g-text-center--xs g-margin-b-80--xs">
@@ -125,28 +223,28 @@
                     <div class="row g-margin-b-40--xs">
                         <div class="col-sm-6 g-margin-b-20--xs g-margin-b-0--md">
                             <div class="g-margin-b-20--xs">
-                                <input type="text" class="form-control s-form-v2__input g-radius--50" placeholder="* Name">
+                                <input type="text" name="txt_name" class="form-control s-form-v2__input g-radius--50" placeholder="* Name">
                             </div>
                             <div class="g-margin-b-20--xs">
-                                <input type="text" class="form-control s-form-v2__input g-radius--50" placeholder="* Email">
+                                <input type="text" name="txt_email" class="form-control s-form-v2__input g-radius--50" placeholder="* Email">
                             </div>
                             <div class="g-margin-b-20--xs">
-                                <input type="text" class="form-control s-form-v2__input g-radius--50" placeholder="* Git Username">
+                                <input type="text" name="txt_github" class="form-control s-form-v2__input g-radius--50" placeholder="* Git Username">
                             </div>
                             <div class="g-margin-b-20--xs">
-                                <input type="text" class="form-control s-form-v2__input g-radius--50" placeholder="* Community Affiliation">
+                                <input type="text" name="txt_community" class="form-control s-form-v2__input g-radius--50" placeholder="* Community Affiliation(to know your experience)">
                             </div>
                             <div class="g-margin-b-20--xs">
-                                <input type="email" class="form-control s-form-v2__input g-radius--50" placeholder="* Previous Volunteer Experience">
+                                <input type="email" name="txt_exp" class="form-control s-form-v2__input g-radius--50" placeholder="* Previous Volunteer Experience">
                             </div>
-                            <input type="text" class="form-control s-form-v2__input g-radius--50" placeholder="* Why volunteer with us?">
+                            <input type="text" name="txt_why" class="form-control s-form-v2__input g-radius--50" placeholder="* Why volunteer with us?">
                         </div>
                         <div class="col-sm-6">
-                            <textarea class="form-control s-form-v2__input g-radius--10 g-padding-y-20--xs" rows="8" placeholder="* How can you help us?"></textarea>
+                            <textarea class="form-control s-form-v2__input g-radius--10 g-padding-y-20--xs" rows="8" name="txt_help" placeholder="* How can you help us?"></textarea>
                         </div>
                     </div>
                     <div class="g-text-center--xs">
-                        <button type="submit" class="text-uppercase s-btn s-btn--md s-btn--primary-bg g-radius--50 g-padding-x-80--xs">Submit</button>
+                        <button type="submit" name="submit" class="text-uppercase s-btn s-btn--md s-btn--primary-bg g-radius--50 g-padding-x-80--xs">Submit</button>
                     </div>
                 </form>
             </div>
@@ -189,11 +287,13 @@
                 </div>
             </div>
             <!-- End Links -->
+            <p class="license" align="center">Portions of this content are ©1998–2018 by individual<span><b> Mozilla.org</b></span> contributors. Content available under a <a rel="license" href="https://www.mozilla.org/en-US/foundation/licensing/website-content/">Creative Commons license</a>.</p>
 
+            <!-- Copyright -->
             <div class="container g-padding-y-20--xs">
                 <div class="row">
                     <div class="col-xs-6">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img class="g-width-100--xs g-height-auto--xs" src="img/wob_lw.png" alt="Mozilla kerala">
                         </a>
                     </div>
@@ -243,3 +343,4 @@
     </body>
     <!-- End Body -->
 </html>
+
